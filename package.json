@@ -1,0 +1,41 @@
+{
+  "name": "minimal-element-performance",
+  "version": "0.0.0",
+  "description": "Minimal element performance tests.",
+  "author": {
+    "name": "Athan Reines",
+    "email": "kgryte@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Athan Reines",
+      "email": "kgryte@gmail.com"
+    }
+  ],
+  "scripts": {},
+  "main": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/element-io/performance.git"
+  },
+  "keywords": [
+    "DOM",
+    "html",
+    "svg",
+    "element",
+    "element.io",
+    "minimal element",
+    "performance"
+  ],
+  "bugs": {
+    "url": "https://github.com/element-io/performance/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ]
+}
