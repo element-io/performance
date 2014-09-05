@@ -1,7 +1,6 @@
 TODO
 ====
 
-1. 	
-2. 	Performance tests against D3+JSDOM.
-3. 	Comment node?
-4. 	
+1. 
+2. JSDOM and no D3
+3. 	

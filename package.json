@@ -30,7 +30,11 @@
   "bugs": {
     "url": "https://github.com/element-io/performance/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "d3": "^3.4.11",
+    "jsdom": "^1.0.0-pre.6",
+    "minimal-element": "0.0.0"
+  },
   "devDependencies": {},
   "licenses": [
     {
