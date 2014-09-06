@@ -35,16 +35,37 @@ ISTANBUL_HTML_REPORT_PATH ?= $(ISTANBUL_OUT)/lcov-report/index.html
 # FILES #
 
 # Source files:
-SOURCES ?= app/*.js
+SOURCES ?= perf-tests/*.js
 
 # Test files:
 TESTS ?= test/*.js
 
 
 
+# PERFORMANCE TESTS #
+
+PERF ?= ./bin/perf
+
+
 
 ###########
 # TARGETS #
+
+
+# PERFORMANCE TESTS #
+
+.PHONY: perf perf-minimal perf-jsdom perf-jsdom-d3
+
+perf: perf-minimal perf-jsdom perf-jsdom-d3
+
+perf-minimal: node_modules
+	$(PERF) --test minimal-element
+
+perf-jsdom: node_modules
+	$(PERF) --test jsdom
+
+perf-jsdom-d3: node_modules
+	$(PERF) --test jsdom-d3
 
 
 # NOTES #

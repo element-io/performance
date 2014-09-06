@@ -1,0 +1,162 @@
+#!/usr/bin/env node
+/**
+*
+*	MINIMAL ELEMENT PERFORMANCE
+*
+*
+*	DESCRIPTION:
+*		- Performance tests.
+*
+*
+*	NOTES:
+*		[1] 
+*
+*
+*	TODO:
+*		[1] 
+*
+*
+*	LICENSE:
+*		MIT
+*
+*	Copyright (c) 2014. Athan Reines.
+*
+*
+*	AUTHOR:
+*		Athan Reines. kgryte@gmail.com. 2014.
+*
+*/
+
+(function() {
+	'use strict';
+
+	// MODULES //
+
+	var // Filesystem module:
+		fs = require( 'fs' ),
+
+		// Path module:
+		path = require( 'path' ),
+
+		// OS module:
+		os = require( 'os' ),
+
+		// Test data:
+		DATA = require( './../data' );
+
+
+	// GLOBALS //
+
+	GLOBAL.WIDTH = 500;
+	GLOBAL.HEIGHT = 500;
+	GLOBAL.RADIUS = 5;
+
+
+	// SCRIPT //
+
+	var args = process.argv,
+		idx,
+		name,
+		repeats,
+		createTest,
+		test,
+		stats,
+		results,
+		output;
+
+
+	// [0] Get the test name [required]:
+	idx = args.indexOf( '--test' );
+	if ( idx === -1 ) {
+		throw new Error( 'Must provide a test name.' );
+	}
+	name = args[ idx+1 ];
+
+	// [1] Get the number of repeats to perform [optional]:
+	idx = args.indexOf( '--repeats' );
+	repeats = ( idx !== -1 ) ? args[ idx+1 ] : 20;
+
+	// [2] Load the test generator:
+	createTest = require( path.resolve( __dirname, '../perf-tests', name ) );
+	
+	// [3] Create a new Test instance and configure:
+	test = createTest().repeats( repeats );
+
+	// [4] Initialize the results object:
+	results = {
+		'meta': {
+			'name': test.name(),
+			'desc': test.desc(),
+			'repeats': repeats,
+			'os': {
+				'name': os.type(),
+				'platform': os.platform(),
+				'arch': os.arch(),
+				'release': os.release()
+			},
+			'data': {
+				'units': {
+					'times': 'ns',
+					'ram': 'bytes',
+					'heap': 'utilization'
+				}
+			},
+			'stats': {
+				'units': {
+					'times': 'us',
+					'ram': 'MB',
+					'heap': 'utilization'
+				},
+				'headers': [
+					'data length',
+					'mean time',
+					'time stdev',
+					'mean heap',
+					'heap stdev',
+					'mean ram',
+					'ram stdev'
+				]
+			}
+		},
+		'data':  new Array( DATA.length ),
+		'stats': new Array( DATA.length )
+	};
+	
+	// [5] For each dataset, set the data and run the test task...
+	for ( var i = 0; i < DATA.length; i++ ) {
+		stats = test
+			.data( DATA[ i ] )
+			.run()
+			.stats();
+
+		results.data[ i ] = {
+			'times': test.times(),
+			'heap': test.heap(),
+			'ram': test.ram()
+		};
+
+		results.stats[ i ] = [
+			DATA[ i ].length,
+			stats.times[ 0 ],
+			stats.times[ 1 ],
+			stats.heap[ 0 ],
+			stats.heap[ 1 ],
+			stats.ram[ 0 ],
+			stats.ram[ 1 ]
+		];
+	} // end FOR i
+
+	// [6] Make the output directory...
+	output = path.resolve( __dirname, '../build' );
+	if ( !fs.existsSync( output ) ) {
+		fs.mkdirSync( output );
+	}
+
+	// [7] Save the results...
+	output = path.join( output, name+'.json' );
+	fs.writeFileSync( output, JSON.stringify( results ), {'encoding': 'utf8'} );
+
+	// [8] Indicate that we are done:
+	console.log( '...finished.' );
+
+})();

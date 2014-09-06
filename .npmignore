@@ -17,7 +17,7 @@ test/
 # Node.js #
 ###########
 .npmignore
-node_modules/
+/node_modules/
 
 # Logs #
 ########

@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+/**
+*
+*	SIMULATE
+*
+*
+*	DESCRIPTION:
+*		- Simulates datasets and writes the datasets to file.
+*
+*
+*	NOTES:
+*		[1] 
+*
+*
+*	TODO:
+*		[1] 
+*
+*
+*	LICENSE:
+*		MIT
+*
+*	Copyright (c) 2014. Athan Reines.
+*
+*
+*	AUTHOR:
+*		Athan Reines. kgryte@gmail.com. 2014.
+*
+*/
+
+(function() {
+	'use strict';
+
+	// MODULES //
+
+	var // Filesystem module:
+		fs = require( 'fs' ),
+
+		// Path module:
+		path = require( 'path' );
+
+
+	// GLOBALS //
+
+	GLOBAL.WIDTH = 500;
+	GLOBAL.HEIGHT = 500;
+	GLOBAL.RADIUS = 5;
+
+
+	// VARIABLES //
+
+	var dir = path.resolve( __dirname, '../data' );
+
+
+	// SIMULATE //
+
+	/**
+	* FUNCTION: simulate()
+	*	Simulates data and writes datasets to separate files.
+	*/
+	function simulate() {
+		var numData = 0,
+			filename,
+			data,
+			xPos,
+			yPos;
+
+		for ( var i = 0; i < 26; i++ ) {
+
+			// Set the number of data to simulate:
+			numData = 100*i;
+
+			// Initialize the data array:
+			data = new Array( numData );
+
+			// Simulate the data:
+			for ( var j = 0; j < numData; j++ ) {
+				xPos = Math.random() * WIDTH;
+				yPos = Math.random() * HEIGHT;
+				data[ j ] = [ xPos, yPos ];
+			}
+
+			// Assemble the filename:
+			filename = path.join( dir, numData+'.json' );
+
+			// Write the data to file:
+			fs.writeFileSync( filename, JSON.stringify( data ), {'encoding': 'utf8' } );
+
+		} // end FOR j
+
+	} // end FUNCTION simulate()
+
+
+	// RUN //
+
+	simulate();
+
+})();
